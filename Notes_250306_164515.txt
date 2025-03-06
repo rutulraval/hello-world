@@ -51,12 +51,25 @@
 </html>
 
 document.getElementById("speakButton").addEventListener("click", function() {
-    let text = document.getElementById("textInput").value;
-    if (text.trim() !== "") {
-        let speech = new SpeechSynthesisUtterance(text);
-        speech.lang = "en-US"; // You can change the language if needed
-        window.speechSynthesis.speak(speech);
-    } else {
+    let text = document.getElementById("textInput").value.trim();
+    if (text === "") {
         alert("Please enter some text.");
+        return;
+    }
+
+    let synth = window.speechSynthesis;
+    let speech = new SpeechSynthesisUtterance(text);
+
+    // Wait for voices to be available before speaking
+    let voices = synth.getVoices();
+    if (voices.length === 0) {
+        synth.onvoiceschanged = function() {
+            voices = synth.getVoices();
+            speech.voice = voices.find(v => v.lang === "en-US") || voices[0];
+            synth.speak(speech);
+        };
+    } else {
+        speech.voice = voices.find(v => v.lang === "en-US") || voices[0];
+        synth.speak(speech);
     }
 });
