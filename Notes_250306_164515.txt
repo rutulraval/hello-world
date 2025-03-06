@@ -1,0 +1,62 @@
+{
+  "manifest_version": 3,
+  "name": "Text to Speech Button",
+  "version": "1.0",
+  "description": "A button to convert text to speech",
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon.png",
+      "48": "icon.png",
+      "128": "icon.png"
+    }
+  }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text to Speech</title>
+    <style>
+        body {
+            width: 2in;
+            height: 2in;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        textarea {
+            width: 90%;
+            height: 50px;
+            margin-bottom: 10px;
+        }
+        button {
+            width: 90%;
+            height: 50px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <textarea id="textInput" placeholder="Enter text"></textarea>
+    <button id="speakButton">Speak</button>
+    <script src="popup.js"></script>
+</body>
+</html>
+
+document.getElementById("speakButton").addEventListener("click", function() {
+    let text = document.getElementById("textInput").value;
+    if (text.trim() !== "") {
+        let speech = new SpeechSynthesisUtterance(text);
+        speech.lang = "en-US"; // You can change the language if needed
+        window.speechSynthesis.speak(speech);
+    } else {
+        alert("Please enter some text.");
+    }
+});
